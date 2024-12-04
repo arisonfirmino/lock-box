@@ -1,11 +1,22 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import InputForm from "@/app/components/input-form";
 import SubmitButton from "@/app/components/submit-button";
+
+import { createNewUser } from "@/app/actions/user";
+import {
+  isEmailAvailable,
+  isUsernameAvailable,
+} from "@/app/helpers/existingUser";
+
+import { signIn } from "next-auth/react";
 
 const schema = yup.object({
   firstName: yup
@@ -49,18 +60,63 @@ const schema = yup.object({
 type FormData = yup.InferType<typeof schema>;
 
 const SignUpForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
+    setIsLoading(true);
+
+    const usernameAvailable = await isUsernameAvailable(data.username);
+    const emailAvailable = await isEmailAvailable(data.email);
+
+    if (!usernameAvailable) {
+      setError("username", {
+        type: "manual",
+        message: "Este nome de usuário já está em uso. Escolha outro.",
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    if (!emailAvailable) {
+      setError("email", {
+        type: "manual",
+        message: "Este e-mail já está em uso. Tente outro.",
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    await createNewUser({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    });
+
+    await signIn("credentials", {
+      redirect: false,
+      emailOrUsername: data.username,
+      password: data.password,
+    });
+
     reset();
-    console.log(data);
+    setIsLoading(false);
+    router.replace("/");
   };
 
   return (
@@ -99,7 +155,7 @@ const SignUpForm = () => {
         register={{ ...register("passwordConfirmation") }}
         error={errors.passwordConfirmation}
       />
-      <SubmitButton>Enviar</SubmitButton>
+      <SubmitButton isLoading={isLoading}>Enviar</SubmitButton>
     </form>
   );
 };

@@ -10,7 +10,7 @@ const SignInSection = ({ isVisible, onActivate }: SignInSectionProps) => {
   return (
     <section className="rounded-lg bg-white">
       <ToggleButton isVisible={isVisible} onActivate={onActivate}>
-        Entrar
+        Login
       </ToggleButton>
       {isVisible && <SignInForm />}
     </section>
