@@ -8,7 +8,7 @@ interface LoginsListProps {
 
 const LoginsList = ({ logins }: LoginsListProps) => {
   return (
-    <ul>
+    <ul className="space-y-2.5">
       {logins.map((login) => (
         <li key={login.id}>
           <LoginItem login={login} />

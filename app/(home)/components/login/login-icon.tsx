@@ -7,14 +7,11 @@ interface LoginIconProps {
 }
 
 const LoginIcon = ({ login }: LoginIconProps) => {
+  const favicon = `https://www.google.com/s2/favicons?sz=64&domain=${login.URL}`;
+
   return (
     <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-solid border-input-border bg-background-secondary">
-      <Image
-        src={`${login.URL}/favicon.ico`}
-        alt={login.name}
-        height={20}
-        width={20}
-      />
+      <Image src={favicon} alt={login.name} height={16} width={16} />
     </div>
   );
 };
