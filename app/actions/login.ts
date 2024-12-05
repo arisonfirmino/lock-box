@@ -47,3 +47,27 @@ export const createNewLogin = async ({
 
   revalidatePath("/");
 };
+
+export const deleteLogin = async ({ id }: { id: string }) => {
+  if (!id) {
+    throw new Error("Por favor, forneça o ID.");
+  }
+
+  const login = await db.login.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!login) {
+    throw new Error("Login não encontrado.");
+  }
+
+  await db.login.delete({
+    where: {
+      id: login.id,
+    },
+  });
+
+  revalidatePath("/");
+};
