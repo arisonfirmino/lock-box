@@ -1,5 +1,6 @@
 import LoginIcon from "@/app/(home)/components/login/login-icon";
 import DetailsButton from "@/app/(home)/components/login/details-button";
+import OpenUrlButton from "@/app/(home)/components/login/open-url-button";
 import DeleteButton from "@/app/(home)/components/login/delete-button";
 
 import { SquarePenIcon } from "lucide-react";
@@ -27,6 +28,7 @@ const LoginItem = ({ login }: LoginItemProps) => {
       </div>
 
       <div className="flex gap-1.5">
+        <OpenUrlButton url={login.URL} />
         <DetailsButton id={login.id} />
         <DeleteButton id={login.id} />
       </div>
