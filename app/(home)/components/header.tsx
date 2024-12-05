@@ -9,7 +9,7 @@ interface HeaderProps {
 
 const Header = ({ user }: HeaderProps) => {
   return (
-    <header className="flex items-center justify-between px-5 py-2.5">
+    <header className="flex items-center justify-between">
       <UserInfo user={user} />
       <SignOutButton />
     </header>

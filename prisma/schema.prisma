@@ -14,7 +14,23 @@ model User {
   username   String   @unique
   email      String   @unique
   password   String
+  logins     Login[]
   created_at DateTime @default(now())
 
   @@map("users")
+}
+
+model Login {
+  id         String   @id @default(uuid())
+  name       String
+  email      String?
+  username   String?
+  password   String
+  URL        String
+  created_at DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("logins")
 }

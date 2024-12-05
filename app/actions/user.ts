@@ -50,13 +50,24 @@ export const createNewUser = async ({
     throw new Error("Todos os campos obrigatórios precisam ser preenchidos.");
   }
 
-  await db.user.create({
+  const user = await db.user.create({
     data: {
       firstName,
       lastName,
       username,
       email,
       password,
+    },
+  });
+
+  await db.login.create({
+    data: {
+      userId: user.id,
+      name: "Lock Box",
+      email: user.email,
+      username: user.username,
+      password: user.password,
+      URL: "https://lock-box-six.vercel.app",
     },
   });
 
