@@ -74,7 +74,7 @@ const Form = () => {
         error={errors.URL}
       />
       <InputForm
-        label="Username"
+        label="Nome de usuário"
         register={{ ...register("username") }}
         error={errors.username}
       />
